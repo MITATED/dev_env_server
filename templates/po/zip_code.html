@@ -1,0 +1,8 @@
+
+        self.enter_text(
+            '{{ data['xpath'] }}',
+            landing_data['ZipCode'],
+            'Input ZipCode: {0}'.format(landing_data['ZipCode']))
+        {%-  if data['registration_info'] == 'on' %}
+        self.registration_info('ZipCode', landing_data['ZipCode'])
+        {%- endif %}

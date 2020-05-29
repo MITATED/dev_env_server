@@ -1,0 +1,13 @@
+
+        gender = '{{ data['male'] }}' if landing_data['gender'] == 'male' else '{{ data['female'] }}'
+        {% if data['type_input'] == 'select' %}
+        self.select(
+            '{{ data['xpath'] }}',
+            gender,
+            'Select gender: {0}'.format(landing_data['gender']))
+        {%- elif data['type_input'] == 'click' %}
+        self.click_random_visible(
+            '{{ data['xpath'] }}'.format(gender),
+            'Select gender: {0}'.format(landing_data['gender'])){% endif %}
+        {% if data['registration_info'] == 'on' -%}
+        self.registration_info('gender', landing_data['gender']){% endif %}

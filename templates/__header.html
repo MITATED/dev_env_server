@@ -1,0 +1,55 @@
+<div class="header">
+    <div class="content">
+        <div class="row">
+            <form id="run">
+{#                <div class="col-xs-4">#}
+{#                    <div class="input-group">#}
+{#                        <span class="input-group-addon" id="basic-addon1">LandingURL</span>#}
+{#                        <input type="text" name="landing_url" class="form-control" placeholder="LandingURL"#}
+{#                               aria-describedby="basic-addon1" value="{{ landing_url }}">#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2">TDS URL</span>
+                        <input type="text" name="tds_url" class="form-control" placeholder="TDS URL"
+                               aria-describedby="basic-addon1" value="{{ tds_url }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="traffic_type" value="wap" autocomplete="off" checked>WAP
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="traffic_type" value="web" autocomplete="off">WEB
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="email_type" value="soi" autocomplete="off" checked>SOI
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="email_type" value="doi" autocomplete="off">DOI
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    <select class="form-control" name="country">
+                        {% for c in countries %}
+                            <option {% if c == country %}selected{% endif %} value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xs-1">
+                    <input class="btn btn-default" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+
+        self.select(
+            '{{ data['xpath'] }}',
+            landing_data['age'],
+            'Age: {}'.format(landing_data['age']))
+        {%-  if data['registration_info'] == 'on' %}
+        self.registration_info('age', landing_data['age'])
+        {%- endif %}

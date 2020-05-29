@@ -1,0 +1,21 @@
+
+        day = landing_data['birthday']['{{ data['z_data'] }}day']
+        elem = self.driver.find_element_by_xpath('{{ data['xpath']|format(data['birthday_day']) }}')
+        self.{{ data['type_input'] }}(
+            elem, day,
+            'Birthday day: {}'.format(day))
+        self.registration_info('birthday_day', day)
+
+        month = landing_data['birthday']['{{ data['z_data'] }}month']
+        elem = self.driver.find_element_by_xpath('{{ data['xpath']|format(data['birthday_month']) }}')
+        self.{{ data['type_input'] }}(
+            elem, month,
+            'Birthday month: {}'.format(month))
+        self.registration_info('birthday_month', month)
+
+        year = landing_data['birthday']['year']
+        elem = self.driver.find_element_by_xpath('{{ data['xpath']|format(data['birthday_year']) }}')
+        self.{{ data['type_input'] }}(
+            elem, year,
+            'Birthday year: {}'.format(year))
+        self.registration_info('birthday_year', year)

@@ -1,0 +1,90 @@
+body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+/*#log{*/
+    /*height: 30vh;*/
+/*}*/
+.hidden{
+    display: none;
+}
+#grid{
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 200px 1fr 400px;
+    grid-template-rows: auto 2fr 2px 1fr;
+    grid-template-areas: "header header header"
+                         "lpanel  cpanel rpanel"
+                         "lpanel cpanel log_sensor"
+                         "lpanel logger logger"
+}
+.header{
+    padding: 10px;
+    grid-area: header;
+}
+.lpanel{
+    grid-area: lpanel;
+}
+.cpanel{
+    grid-area: cpanel;
+}
+.rpanel{
+    grid-area: rpanel;
+}
+.lpanel,
+.rpanel,
+.cpanel{
+    border: 1px solid #9d9d9d;
+    overflow: auto;
+    margin-bottom: 0;
+}
+.logger{
+    white-space: pre-line;
+    grid-area: logger;
+}
+.log_sensor{
+    grid-area: log_sensor;
+}
+.lpanel .l-hidden{
+	display: none;
+}
+.cpanel .c-hidden{
+	display: none;
+}
+.log_sensor{
+    width: 100%;
+    height: 2px;
+    background-color: red;
+}
+
+#po{
+    height: 80vh;
+    overflow: scroll;
+}
+
+.cpanel .panel{
+    padding: 0 0 0 0;
+    margin-bottom: 0;
+}
+.cpanel *[data-click]{
+    padding: 0;
+}
+.lpanel > *{
+    padding: 5px;
+}
+
+#sortable{
+    min-height: 150px;
+    padding-bottom: 200px;
+}
+
+#sortable>*:not(.loaded-page){
+    margin-left: 50px;
+    margin-right: 10px;
+}
+
+#sortable .loaded-page:not(:first-child){
+    margin-top: 20px;
+}
+

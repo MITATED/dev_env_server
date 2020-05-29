@@ -1,0 +1,3 @@
+
+        self.click('{{ data['xpath'] }}', '{{ data['desc'] }}'{% if data['wait_after'] %},
+            waite_after={{ data['wait_after'] }}{% endif %})

@@ -1,0 +1,144 @@
+<div class="inventory">
+    <table class="table table-hover table-bordered" id="inventory" style="width:100%">
+        <thead>
+        <tr>
+            {#            <td class="text-center">#</td>#}
+            <td class="text-center">URL Domen</td>
+            <td class="text-center">WEB</td>
+            <td class="text-center">WAP</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for inventory in inventorys %}
+            <tr>
+                {#                <td class="text-center">{{ inventory.id }}</td>#}
+                <td class="text-center input i-domen">
+                    <span>{{ inventory.domen }}</span>
+                    <input type="text" class="form-control hidden" placeholder="domen">
+                </td>
+                <td class="text-center input i-web">
+                    <span>{{ inventory.web }}</span>
+                    <input type="text" class="form-control hidden" placeholder="web">
+                </td>
+                <td class="text-center input i-wap">
+                    <span>{{ inventory.wap }}</span>
+                    <input type="text" class="form-control hidden" placeholder="wap">
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#largeModal">Add inventory
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button class="btn btn-success" id="send">Send</button>
+        </div>
+    </div>
+
+    <div id="largeModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Add inventory</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="domen">Domen</label>
+                            <input type="text" class="form-control" id="domen" placeholder="Domen">
+                        </div>
+                        <div class="form-group">
+                            <label for="web">WEB</label>
+                            <input type="text" class="form-control" id="web" placeholder="WEB">
+                        </div>
+                        <div class="form-group">
+                            <label for="wap">WAP</label>
+                            <input type="text" class="form-control" id="wap" placeholder="WAP">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary add_inv">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        let table = $('#inventory').DataTable();
+
+        table.on('draw', function () {
+            $('#inventory .input').each(function (index) {
+                toInput($(this));
+            });
+        });
+        table.draw();
+
+        {#toInput($('.input'));#}
+        $('.add_inv').on('click', addInv);
+        $('#send').on('click', sendInv);
+    });
+
+    let input_el;
+    let span;
+    let tr;
+
+    function toInput(el) {
+        el.unbind('click');
+        el.on('click', function () {
+            span = $(this).find('span');
+            span.addClass('hidden');
+            input_el = $(this).find('input');
+            input_el.val(span.text());
+            input_el.removeClass('hidden');
+            input_el.focus();
+            input_el.on('focusout', function () {
+                $(this).addClass('hidden');
+                span = $(this).siblings('span');
+                span.text(input_el.val());
+                span.removeClass('hidden');
+            });
+        });
+    }
+
+    function addInv() {
+        tr = $('#inventory tr:last').clone();
+        tr.find('.i-domen span').text($('#domen').val());
+        tr.find('.i-web span').text($('#web').val());
+        tr.find('.i-wap span').text($('#wap').val());
+        toInput(tr.find('.input'));
+        tr.appendTo('#inventory tbody');
+    }
+
+    function sendInv() {
+        let data = {};
+
+        function sp_text(el, t) {
+            return el.find('.i-' + t + ' span').text()
+        }
+
+        $('#inventory tbody tr').each(function (index) {
+            data[sp_text($(this), 'domen')] = [sp_text($(this), 'web'), sp_text($(this), 'wap')];
+        });
+        console.log(data)
+        $.ajax({
+            type: "POST",
+            url: '/inv',
+            contentType: 'application/json',
+            dataType: 'json',
+            async: false,
+            data: JSON.stringify(data),
+            success: function (data) {
+                console.log(data)
+            }
+        });
+    }
+
+</script>

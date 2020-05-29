@@ -1,0 +1,234 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import json
+import random
+import re
+{%- for name, data in context %}{% if name == 'UploadPhoto' %}
+import shutil
+import base64
+import os
+{%- endif %}{% endfor %}
+
+
+from miner import (PageObject,
+                   ServerErrorException,
+                   SurfException,
+                   LandingPageException)
+from miner.myfaker import MyFaker
+from faker.providers import BaseProvider
+
+
+class page_object(PageObject, BaseProvider):
+
+    def __init__(self, name='{{ name }} {{ traffic_type }}', current_url='',
+                 worker=None):
+        BaseProvider.__init__(self, None)
+        PageObject.__init__(self,
+                            name=name,
+                            worker=worker,
+                            current_url=current_url)
+        self._stay_on_page = 0.5
+        self._is_upload_photo = True if random.randint(0, 100) <= 30 else False
+
+    # --------------------------------------------------------------------------
+    #    __                ___
+    #   / /  ___ ____  ___/ (_)__  ___ _
+    #  / /__/ _ `/ _ \/ _  / / _ \/ _ `/
+    # /____/\_,_/_//_/\_,_/_/_//_/\_, /
+    #                            /___/
+
+    def __landing_generate_data(self, email_type, email_json, task_json):
+        profile = {}
+        if email_type == 'doi':
+            bucket = 'profile/doi/d'
+            try:
+                profile_data = self.get_multidata(bucket)
+            except Exception as err:
+                self.l_error('Error getting profile data')
+                self._logger.exception(err)
+                raise ServerErrorException('Error getting profile from server')
+            if profile_data['success']:
+                self.l_debug('Got data from {} bucket'.format(bucket))
+                profile = json.loads(profile_data['data'])
+                profile.update({
+                    'email': email_json['profile']['email'],
+                    'gender': email_json['profile']['gender'],
+                })
+            else:
+                self.l_error('Can\'t get bucket data for {}'.format(bucket))
+                self.l_debug(profile_data)
+        else:
+            gender = self.random_element(
+                {
+                    'male': task_json['surf_task']['male_percentage'],
+                    'female': 100 - task_json['surf_task']['male_percentage']
+                }
+            )
+            self.l_debug('We need profile with {0} gender'.format(gender))
+            profile = self.__get_profile_from_gender_bucket(gender)
+        mf = MyFaker()
+        username = mf.fake.dating_screen_name()
+        while not re.match('^(?=.*\d)(?=.*[a-zA-Z]).{5,30}$', username):
+            username = mf.fake.dating_screen_name()
+        password = mf.fake.dating_password()
+        while not re.match('^(?=.*\d)(?=.*[a-zA-Z]).{6,16}$', password):
+            password = mf.fake.dating_password()
+        profile['username'] = username
+        profile['password'] = password
+        profile['birthday'] = mf.fake.dating_birthday(
+            age_min=task_json['surf_task']['age_min'],
+            age_max=task_json['surf_task']['age_max']
+        )
+        profile['age_min'] = str(task_json['surf_task']['age_min'])
+        profile['age_max'] = str(task_json['surf_task']['age_max'])
+        profile['height_min'] = str(random.randint(150, 180))
+        profile['height_max'] = str(random.randint(181, 200))
+        profile['age'] = str(random.randint(
+            int(task_json['surf_task']['age_min']),
+            int(task_json['surf_task']['age_max'])
+        ))
+        self.l_debug('   landing data: {0}'.format(profile))
+        return profile
+
+    def __get_profile_from_gender_bucket(self, gender):
+        accepted_buckets = ['profile', 'profile/soi/hq', 'profile/soi/lq']
+        # TODO use proper names for new bucket
+        # TODO correct log messages
+        accepted_buckets += ['profile/soi/' + gender]
+        for bucket in accepted_buckets:
+            for _ in range(20):
+                try:
+                    profile_data = self.get_multidata(bucket)
+                except Exception as err:
+                    self.l_error('Error getting profile data')
+                    self._logger.exception(err)
+                    raise ServerErrorException(
+                        'Error getting profile from server')
+                if profile_data['success']:
+                    profile = json.loads(profile_data['data'])
+                    if profile['gender'] == gender:
+                        self.l_debug('Got data from {} bucket'.format(bucket))
+                        return profile
+                    else:
+                        self.release_multidata(profile_data['id'])
+                else:
+                    self.l_error(
+                        'Can\'t get bucket data for {}'.format(bucket))
+                    self.l_debug(profile_data)
+                    break
+        else:
+            raise SurfException(key='NO_DATA_FROM_SERVER',
+                                message='No profile data received from server')
+
+    # --------------------------------------------------------------------------
+    #    __                ___
+    #   / /  ___ ____  ___/ (_)__  ___ _
+    #  / /__/ _ `/ _ \/ _  / / _ \/ _ `/
+    # /____/\_,_/_//_/\_,_/_/_//_/\_, /
+    #                            /___/
+
+    def landing_register(self, task_json, ipinfo_json, email_json,
+                         userdata_json={}, params={}):
+        landing_url = self._driver.current_url
+        self.l_debug('Start Landing registration. URL: {0}'.format(landing_url))
+        registrator = self.__landing_register_first_funnel
+        # =============================================
+        # if 'snapcheat' in landing_url:
+        #     registrator = self.__landing_register_first_funnel
+        # elif 'sinder' in landing_url:
+        #     registrator = self.__landing_register_second_funnel
+        # =============================================
+        if registrator:
+            email_type = params['action_params']['email_type']
+            landing_data = self.__landing_generate_data(
+                email_type, email_json, task_json)
+            return registrator(landing_data)
+
+        self.l_error('Can\'t determine landing')
+        self.l_debug(self._driver.current_url)
+        raise LandingPageException(
+            'Unknown landing {}'.format(self._driver.current_url))
+
+    def __landing_register_first_funnel(self, landing_data):
+{%- block landing_register %}
+{%- endblock %}
+
+    # --------------------------------------------------------------------------
+    #     ______                 __  _
+    #    / ____/_  ______  _____/ /_(_)___  ____  _____
+    #   / /_  / / / / __ \/ ___/ __/ / __ \/ __ \/ ___/
+    #  / __/ / /_/ / / / / /__/ /_/ / /_/ / / / (__  )
+    # /_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/
+    #
+
+    def js_confirm(self, elem):
+        script = '''
+            $(arguments[0]).trigger('focus');
+            $(arguments[0]).trigger('blur');
+            $(arguments[0]).trigger('change');
+        '''
+        self._driver.execute_script(script, elem)
+
+{%- for name, data in context %}{% if name == 'UploadPhoto' %}
+
+    def __upload_photo(self, landing_data):
+        img_path = self.__get_image('photo/' + landing_data['gender'])
+        script = """
+            $('input[type="file"]').css('font-size', 20);
+            $('input[type="file"]').css('opacity', '1');
+        """
+        self._driver.execute_script(script)
+        self.sleep_rnd(3, 1)
+        image = self.find_visible('{{ data['xpath'] }}', idx=0)
+        image.send_keys(img_path)
+        self.sleep(30)
+
+    def __get_image(self, bucket):
+        try:
+            message_data = self.get_multidata(bucket, True)
+        except Exception as err:
+            self.l_error('Error getting answer message data')
+            self._logger.exception(err)
+            raise SurfException(key='NO_DATA_FROM_SERVER',
+                                message='Error getting answer from server')
+        if message_data['success']:
+            with open('photo.jpg', "wb") as fh:
+                fh.write(base64.b64decode(message_data['data']))
+            path = self.__photo_rename(os.path.realpath('photo.jpg'))
+        else:
+            self.l_error('Can\'t get answer data')
+            self.l_debug(message_data)
+            raise SurfException(key='NO_DATA_FROM_SERVER',
+                                message='No answer data received from server')
+        return path
+
+    @staticmethod
+    def __photo_rename(image_path):
+        f = MyFaker()
+        new_path = "/tmp/{0}".format(f.fake.dating_photo_name())
+        shutil.move(image_path, new_path)
+        return new_path
+{%- endif %}{% endfor %}
+
+    # --------------------------------------------------------------------------
+    #    _____ __
+    #   / __(_) /____
+    #  _\ \/ / __/ -_)
+    # /___/_/\__/\__/
+    #
+
+    def fill_funnel(self, site_data=None):
+        pass
+
+    def skip_funnel(self):
+        self.fill_funnel()
+
+    def login(self, landing_data):
+        pass
+
+    def upload_photo(self, photo_url, user_agent):
+        pass
+
+    def site_surf(self, surf_number=5):
+        pass

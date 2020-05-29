@@ -1,0 +1,53 @@
+<form class="list-group-item list" id="draggable" data-click="{{ form.slug }}">
+    <div class="c-hidden ">
+        {{ form.name }}
+    </div>
+    <div class="l-hidden">
+        <div class="panel panel-default">
+            <!-- Обычное содержимое панели -->
+            <div class="input-group input-group-sm">
+
+                <span class="input-group-btn">
+                     <i class="fas fa-bars btn"></i>
+                </span>
+                <div class="input-group-btn">
+                    <button class="btn btn-default btn-name disabled" type="button">{{ form.name }}</button>
+                    <button class="btn btn-default btn-dropdown">
+                        <i class="fas fa-angle-double-down"></i>
+                    </button>
+                </div>
+                <input name="xpath" type="text" class="form-control xpath-input" placeholder="XPATH">
+                <div class="input-group-btn">
+                    <button class="btn btn-default btn-clone" type="button">
+                        <i class="fas fa-clone"></i>
+                    </button>
+                    <button class="btn btn-default btn-search" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="btn btn-default btn-pointer" type="button">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </button>
+                    <button class="btn btn-default btn-database" type="button">
+                        <i class="fas fa-database"></i>
+                    </button>
+                    <button class="btn btn-default btn-trash" type="button">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+            {% if form.inputs %}
+                <div class="panel-body" id="demo">
+                    <div class="input-group row btn-group-justified">
+                        {% for input in form.inputs %}
+                            <label class="text-left col-md-12">
+                                <input type="{{ input.type }}"{% if input.value %}value="{{ input.value }}"{% endif %} name="{{ input.name }}" checked
+                                       aria-label="{{ input.text }}">
+                                {{ input.text }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</form>

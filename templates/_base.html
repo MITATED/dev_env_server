@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}{% endblock %} | Flask</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+    <!-- JQuery -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+
+    <!-- dataTables -->
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}" charset="utf-8"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}">
+
+    <!-- ClipBoard -->
+    <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+    <!-- HighLight -->
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <!-- MyFiles -->
+    <script src="{{ url_for('static', filename='js/func.js') }}" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}" charset="utf-8"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+          integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+</head>
+
+<body>
+
+{% block content %}
+
+{% endblock %}
+
+
+<!-- Bootstrap script -->
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+
+
+{% block content %}
+
+    <div id="grid">
+        {% include '__header.html' %}
+        {% include '__lpanel.html' %}
+        {% include '__cpanel.html' %}
+        {#    {% include '__inventory.html' %}#}
+        {% include '__rpanel.html' %}
+        <div class="log_sensor"  id="log_sensor"></div>
+        <pre class="logger" id="log"></pre>
+    </div>
+    <script>
+    </script>
+
+{% endblock %}
+
+{% block title %}
+    Home page
+{% endblock %}

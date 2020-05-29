@@ -1,0 +1,5 @@
+
+        self.click_random_visible(
+            '{{ data['xpath'] }}',
+            'Agree'{% if data['wait_after'] %},
+            waite_after={{ data['wait_after'] }}{% endif %})

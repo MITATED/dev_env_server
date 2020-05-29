@@ -1,0 +1,15 @@
+
+        elem = self.driver.find_element_by_xpath('{{ data['xpath'] }}')
+        self.enter_text(
+            elem, landing_data['{{ name }}'],
+            'Input {{ name }}: {0}'.format(landing_data['{{ name }}']))
+        {%-  if data['task_email_used'] == 'on' %}
+        self.task_email_used(landing_data['email'])
+        {%- endif %}
+        {%-  if data['registration_info'] == 'on' %}
+        self.registration_info('{{ name }}', landing_data['{{ name }}'])
+        {%- endif %}
+        {%-  if data['js_confirm'] == 'on' %}
+        self.js_confirm(elem)
+        {%- endif %}
+

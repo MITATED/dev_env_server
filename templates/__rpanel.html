@@ -1,0 +1,60 @@
+<div class="rpanel">
+    <div class="form-group has-success">
+        <div class="input-group">
+            <input type="text" class="form-control" id="xpath_active" placeholder="XPATH active">
+            <span class="input-group-btn">
+               <button class="btn btn-default" type="button" id="find_xpath">Go!</button>
+            </span>
+        </div>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#panel1">Search</a></li>
+        <li><a data-toggle="tab" href="#panel2">Others PO</a></li>
+        <li class="disabled">
+            <a data-toggle="tab" href="#">
+                <div class="loader text-center hidden">
+                    <span class="glyphicon fa-spin glyphicon-refresh" aria-hidden="true"></span>
+                </div>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="panel1" class="tab-pane fade in active">
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <button id="search_click" class="btn btn-primary">Click</button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button id="search_hover" class="btn btn-primary">Hover</button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button id="search_several" class="btn btn-primary">Several</button>
+                </div>
+            </div>
+            <ul class="list-group xpathes">
+                <li class="list-group-item hidden"><a href="#" class="select"></a></li>
+            </ul>
+        </div>
+        <div id="panel2" class="tab-pane fade">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-success active">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked>WAP
+                </label>
+                <label class="btn btn-success">
+                    <input type="radio" name="options" id="option2" autocomplete="off">WEB
+                </label>
+            </div>
+        </div>
+        <div id="panel3" class="tab-pane fade">
+            <h3>Панель 3</h3>
+            <p>Содержимое 3 панели...</p>
+        </div>
+        <div id="panel4" class="tab-pane fade">
+            <h3>Панель 4</h3>
+            <p>Содержимое 4 панели...</p>
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,48 @@
+{%- extends 'po/index.html' %}
+{%- block landing_register %}
+        self.l_debug('Landing register first funnel')
+        {%- for name, data in context %}
+            {%- if name in ('loaded') %}
+                {%- include 'po/loaded.html' %}
+            {% elif name in ('gender') %}
+                {%- include 'po/gender.html' -%}
+            {% elif name in ('click') %}
+                {%- include 'po/click.html' -%}
+            {% elif name in ('click_random') %}
+                {%- include 'po/click_random.html' -%}
+            {% elif name in ('agree') %}
+                {%- include 'po/agree.html' -%}
+            {% elif name in ('age') %}
+                {%- include 'po/age.html' -%}
+            {% elif name in ('UploadPhoto') %}
+                {%- include 'po/upload_photo.html' -%}
+            {% elif name in ('ZipCode') %}
+                {%- include 'po/zip_code.html' -%}
+            {% elif name in ('birthday') %}
+                {%- include 'po/birthday.html' -%}
+            {%- elif name in ('email', 'username', 'password', 'TelephoneNumber', 'Fname', 'Lname') %}
+                {%- include 'po/enter_text.html' -%}
+            {%- elif name in ('form') %}
+                {%- include 'po/form.html' -%}
+            {% endif -%}
+        {% endfor %}
+        # =============================================
+        self.sleep_rnd(2, 1)
+        error_label = self.finds_visible(xpath)
+        if error_label:
+            raise SurfException(key='EMAIL_NOT_VALID',
+                                message='We notice not valid email address')
+        # =============================================
+        self.biz_complete()
+        # =============================================
+        self.sleep_rnd(7, 2)
+        # confirm = self.finds_visible(xpath)
+        # if confirm:
+        if 'registered' in self._driver.current_url:
+            self.log_registration_ok()
+            self.send_png_and_html('COMPLETE registration')
+            return landing_data
+        self.log_registration_error()
+        raise SurfException(key='LANDING_REGISTRATION_ERROR',
+                            message='Landing registration error')
+{%- endblock %}

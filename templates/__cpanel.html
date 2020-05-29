@@ -1,0 +1,55 @@
+<div class="cpanel">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#cpanel1">Search</a></li>
+        <li><a data-toggle="tab" href="#cpanel2">Control</a></li>
+        <li><a data-toggle="tab" href="#cpanel3">Inventory</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="cpanel1" class="tab-pane fade in active">
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group" id="sortable">
+
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <div class="btn-group btn-group-justified" data-toggle="buttons">
+                        <label class="btn btn-warning active">
+                            <input type="radio" name="options" id="clear_cpanel" autocomplete="off" checked>Clear
+                        </label>
+                        <label class="btn btn-success">
+                            <input type="radio" name="options" id="send_cpanel" autocomplete="off">Send
+                        </label>
+                        <label class="btn btn-primary">
+                            <input type="radio" name="options" id="copy_cpanel" autocomplete="off">Copy
+                        </label>
+                    </div>
+                    <pre class="logger"><code class="python" id="po"></code></pre>
+                </div>
+            </div>
+        </div>
+        <div id="cpanel2" class="tab-pane fade">
+            {#            <div class="btn-group btn-group-justified" data-toggle="buttons">#}
+            {#                <label class="btn btn-warning active">#}
+            {#                    <input type="radio" name="options" id="clear_cpanel" autocomplete="off" checked>Clear#}
+            {#                </label>#}
+            {#                <label class="btn btn-success">#}
+            {#                    <input type="radio" name="options" id="send_cpanel" autocomplete="off">Send#}
+            {#                </label>#}
+            {#            </div>#}
+            {#            <pre class="logger"><code class="python" id="po"></code></pre>#}
+        </div>
+        <div id="cpanel3" class="tab-pane fade">
+            {% include '__inventory.html' %}
+        </div>
+        <div id="panel4" class="tab-pane fade">
+            <h3>Панель 4</h3>
+            <p>Содержимое 4 панели...</p>
+        </div>
+    </div>
+
+</div>
+
+
+
